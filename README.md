@@ -13,7 +13,7 @@ dataanalys I, II och III vid Stockholms universitet.
 
 För att installera paketet `sda123` behöver du först installera paketet
 `remotes`. Paketet `remotes` innehåller funktionen `install_github()`
-som gör det möjligt att installera paket direkt från GitHub! När paket
+som gör det möjligt att installera paket direkt från GitHub! När paketet
 väl är installerat på din dator behöver du endast använda
 `library(sda123)` för att komma åt funktionerna och dataseten i paketet.
 
