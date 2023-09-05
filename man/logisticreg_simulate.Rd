@@ -41,5 +41,5 @@ Alternatively the covariate can follow a uniform distribution.
 library(sda123)
 simdata <- logisticreg_simulate(n = 500, betavect = c(1, -2, 1, 0))
 glmfit <- glm(y ~ X1 + X2 + X3, data = simdata, family = binomial)
-logisticreg_summary(glmfit, odds_ratio = F)
+logisticreg_summary(glmfit, odds_ratio = FALSE)
 }

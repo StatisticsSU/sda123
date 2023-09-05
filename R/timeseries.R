@@ -60,9 +60,10 @@ moving_average_seasonal <- function(y, season, plotfig = TRUE){
 #'
 #' @param y a vector with time series data
 #' @export
+#' @importFrom manipulate manipulate
 #' @examples
 #' library(SUdatasets)
-#' moving_average_manip(globaltemp$temp)
+#' # moving_average_manip(globaltemp$temp)
 moving_average_manip <- function(y){
   manipulate::manipulate(
     invisible(moving_average(y, r)),

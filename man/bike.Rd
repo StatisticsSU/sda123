@@ -15,9 +15,10 @@ A data frame with 731 rows and 12 variables:
 \item{weekday}{day of the week 0-6, 0 ="Sunday"}
 \item{workingday}{binary variable for working days (=1)}
 \item{weathersit}{categorical variable (1="clear", 2 = "mist", 3 = "light snow")}
-\item{temp}{continuous temperature variable, normalized between \link{0,1}}
-\item{hum}{continuous humidity variable, normalized between \link{0,1}}
-\item{windspeed}{continuous windspeed variable, normalized between \link{0,1}}
+\item{temp}{continuous temperature variable, normalized between \eqn{[0,1]}}
+\item{hum}{continuous humidity variable, normalized between \eqn{[0,1]}}
+\item{windspeed}{continuous windspeed variable, normalized between \eqn{[0,1]}}
+\item{nRides}{Number of bike rentals.}
 ...
 }
 }

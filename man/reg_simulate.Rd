@@ -61,7 +61,7 @@ Alternatively the covariate can follow a uniform distribution.
 library(sda123)
 simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = 2)
 lmfit <- lm(y ~ X1 + X2 + X3, data = simdata)
-reg_summary(lmfit, anova = F)
+reg_summary(lmfit, anova = FALSE)
 
 # Simulate from a heteroscedastic student-t regression and detect problems with residuals
 simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = exp, heteroparam = c(0,1,0,0), responsedist = 'student', studentdf = 4)
@@ -69,7 +69,14 @@ lmfit <- lm(y ~ X1 + X2 + X3, data = simdata)
 reg_residuals(lmfit)
 
 #' # Simulate from a homoscedastic student-t regression with autocorrelated errors.
-simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = 2, responsedist = 'student', studentdf = 4, ar1phi = 0.9)
+simdata <- reg_simulate(
+ n = 500,
+ betavect = c(1, -2, 1, 0),
+ sigma_eps = 2,
+ responsedist = 'student',
+ studentdf = 4,
+ ar1phi = 0.9
+)
 lmfit <- lm(y ~ X1 + X2 + X3, data = simdata)
 reg_residuals(lmfit)
 }

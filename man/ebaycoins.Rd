@@ -7,17 +7,18 @@
 \format{
 A data frame with 1000 rows and 10 variables:
 \describe{
-\item{BookVal}{The recommended value of the coin as reported by the Internet coin seller Golden Eagle Coins at http:// www.goldeneaglecoin.com.}
-\item{MinorBlem}{Binary, coded as 1 if the proof set had minor damage on the box or packaging according to a subjective assessment of the item using the seller’s description and pictures of the auctioned object.}
-\item{MajorBlem}{Binary, coded as 1 if at least one coin was missing in the package or if other major imperfections were present.}
+\item{X}{Completely unneccesary variable that gives the row number.}
+\item{nBids}{Counts. Number of bidders in the auction.}
 \item{PowerSeller}{Binary, coded as 1 if the seller is ranked among the most successful sellers in terms of product sales and customer satisfaction on eBay.}
-\item{IDSeller}{Binary, coded as 1 if the seller’s identity has been established by cross-checking his contact information in consumer and business databases.}
+\item{VerifyID}{Binary, coded as 1 if the seller’s identity has been established by cross-checking his contact information in consumer and business databases.}
 \item{Sealed}{Binary, coded as 1 if the proof set is sealed in its original envelope.}
-\item{NegFeedback}{Binary, coded as 1 if more than 1\% of the seller’s feedback scores from buyers have been negative.}
-\item{ReservePriceFrac}{The seller’s reservation price (lowest accepted sale price) as a fraction of the object’s book value.}
-\item{NBidders}{Counts. Number of bidders in the auction.}
-\item{FinalPrice}{Final price of the auctioned coin including shipping costs. NaN if the item was not sold.}
-...
+\item{Minblem}{Binary, coded as 1 if the proof set had minor damage on the box or packaging according to a subjective assessment of the item using the seller’s description and pictures of the auctioned object.}
+\item{MajBlem}{Binary, coded as 1 if at least one coin was missing in the package or if other major imperfections were present.}
+\item{LargNeg}{Binary, coded as 1 if more than 1\% of the seller’s feedback scores from buyers have been negative.}
+\item{LogBook}{The recommended value of the coin as reported by the Internet coin seller Golden Eagle Coins at http:// www.goldeneaglecoin.com. On the log scale.}
+\item{MinBidShare}{The seller’s reservation price (lowest accepted sale price) as a fraction of the object’s book value.}
+\item{Sold}{True if the coin was sold.}
+\item{low_res_price}{Was the reservation price low or high?}
 }
 }
 \source{
@@ -27,8 +28,11 @@ Wegmann, B. and Villani, M. (2011). Bayesian Inference in Structural Second-Pric
 ebaycoins
 }
 \description{
-The dataset contains the final price and number of bidders in 1000 eBay auctions of collectors coins (U.S. proof sets, i.e. specially packaged collectors’ coins sold by the U.S. Mint) along with several
-auction-specific features carefully collected by a human by visual inspection of text and images.
-The data was collected for auctions in the time periods Nov 7 - Dec 19, 2007 and Dec 27, 2007 - Jan 22, 2008.
+The dataset contains the final price and number of bidders in 1000 eBay
+auctions of collectors coins (U.S. proof sets, i.e. specially packaged
+collectors’ coins sold by the U.S. Mint) along with several
+auction-specific features carefully collected by a human by visual
+inspection of text and images.
+The data was collected for auctions in the time periodsNov 7 - Dec 19, 2007 and Dec 27, 2007 - Jan 22, 2008.
 }
 \keyword{datasets}

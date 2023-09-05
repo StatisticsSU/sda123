@@ -6,6 +6,17 @@
 \usage{
 simAR1(n, phi = 0, mu = 0, sigma_eps = 1, epsilons = NA)
 }
+\arguments{
+\item{n}{Number of observations.}
+
+\item{phi}{Value of the parameter phi. Phi = 0 will give white noise and phi = 1 a gaussian random walk.}
+
+\item{mu}{Mean of the AR process.}
+
+\item{sigma_eps}{Standard deviation of the error term.}
+
+\item{epsilons}{Vector of error terms. If not included errors will be generated.}
+}
 \description{
 Simulates \code{n} observations from
 \deqn{x_t = \mu + \phi(x_{t-1}-\mu) + \epsilon, \epsilon \sim N(0, \sigma_\epsilon)}{x_t = \mu + \phi(x_{t-1}-\mu) + \epsilon, \epsilon ~ N(0, \sigma_ \epsilon^2)}

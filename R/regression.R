@@ -13,7 +13,7 @@
 #' @examples
 #' library(sda123)
 #' lmfit = lm(nRides ~ temp + hum + windspeed, data = bike)
-#' regsumm = reg_summary(lmfit, anova = T, conf_intervals = T, vif_factors = T)
+#' regsumm = reg_summary(lmfit, anova = TRUE, conf_intervals = TRUE, vif_factors = TRUE)
 #' regsumm$param
 #' regsumm$anova
 #' regsumm$fit_measures
@@ -154,7 +154,7 @@ reg_predict <- function(formula, data, level = 0.95,
 #' library(sda123)
 #' simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = 2)
 #' lmfit <- lm(y ~ X1 + X2 + X3, data = simdata)
-#' reg_summary(lmfit, anova = F)
+#' reg_summary(lmfit, anova = FALSE)
 #'
 #' # Simulate from a heteroscedastic student-t regression and detect problems with residuals
 #' simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = exp, heteroparam = c(0,1,0,0), responsedist = 'student', studentdf = 4)
@@ -162,7 +162,14 @@ reg_predict <- function(formula, data, level = 0.95,
 #' reg_residuals(lmfit)
 #'
 #' #' # Simulate from a homoscedastic student-t regression with autocorrelated errors.
-#' simdata <- reg_simulate(n = 500, betavect = c(1, -2, 1, 0), sigma_eps = 2, responsedist = 'student', studentdf = 4, ar1phi = 0.9)
+#' simdata <- reg_simulate(
+#'  n = 500,
+#'  betavect = c(1, -2, 1, 0),
+#'  sigma_eps = 2,
+#'  responsedist = 'student',
+#'  studentdf = 4,
+#'  ar1phi = 0.9
+#' )
 #' lmfit <- lm(y ~ X1 + X2 + X3, data = simdata)
 #' reg_residuals(lmfit)
 reg_simulate <- function(n, betavect, sigma_eps, intercept = TRUE, responsedist = 'normal',
@@ -294,7 +301,7 @@ reg_residuals <- function(lm_object){
   p3 = lm_object$model %>%
     ggplot(aes(x = residuals)) +
     geom_histogram(aes(y = after_stat(density)),
-                   bins = 1 + log(n,2), fill = prettycol[1]) +
+                   bins =  1 + ceiling(log(n,2)), fill = prettycol[1]) +
     stat_function(fun = dnorm, n = 101,
                   args = list(mean = 0, sd = sd(lm_object$model$residuals)),
                   color = prettycol[4]) +
@@ -320,6 +327,11 @@ reg_residuals <- function(lm_object){
 #'
 #' Simulates `n` observations from
 #' \deqn{x_t = \mu + \phi(x_{t-1}-\mu) + \epsilon, \epsilon \sim N(0, \sigma_\epsilon)}{x_t = \mu + \phi(x_{t-1}-\mu) + \epsilon, \epsilon ~ N(0, \sigma_ \epsilon^2)}
+#' @param n Number of observations.
+#' @param phi Value of the parameter phi. Phi = 0 will give white noise and phi = 1 a gaussian random walk.
+#' @param mu Mean of the AR process.
+#' @param sigma_eps Standard deviation of the error term.
+#' @param epsilons Vector of error terms. If not included errors will be generated.
 #' @export
 #' @examples
 #' library(sda123)
@@ -423,9 +435,15 @@ logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_inter
 #' library(sda123)
 #' simdata <- logisticreg_simulate(n = 500, betavect = c(1, -2, 1, 0))
 #' glmfit <- glm(y ~ X1 + X2 + X3, data = simdata, family = binomial)
-#' logisticreg_summary(glmfit, odds_ratio = F)
-logisticreg_simulate <- function(n, betavect, intercept = TRUE, covdist = 'normal',
-                                rho_x = 0, sigma_x = rep(1,length(betavect)-intercept)){
+#' logisticreg_summary(glmfit, odds_ratio = FALSE)
+logisticreg_simulate <- function(
+    n,
+    betavect,
+    intercept = TRUE,
+    covdist = 'normal',
+    rho_x = 0,
+    sigma_x = rep(1, length(betavect) - intercept)
+  ){
 
   k = length(betavect) - intercept
 
