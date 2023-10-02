@@ -265,18 +265,25 @@ reg_crossval <- function(formula, data, nfolds, obs_order = "random"){
 #' 3) Histogram and normal density fit
 #' 4) Residuals vs order.
 #' @param lm_object a fitted regression model from `lm`.
+#' @param studentized use (externally) studentized residuals. Defaults to FALSE.
 #' @export
 #' @examples
 #' library(sda123)
 #' fit = lm(mpg ~ hp, data = mtcars)
 #' reg_residuals(fit)
 
-reg_residuals <- function(lm_object){
+reg_residuals <- function(lm_object, studentized = FALSE){
 
   n = dim(lm_object$model)[1]
 
   # adding residuals and fit to the data frame
-  lm_object$model$residuals <- resid(lm_object)
+  if (studentized) {
+    lm_object$model$residuals <- rstudent(lm_object)
+  }
+  else {
+    lm_object$model$residuals <- resid(lm_object)
+  }
+  
   lm_object$model$fitted <- fitted(lm_object)
   lm_object$model$obsnumber <- 1:n
 

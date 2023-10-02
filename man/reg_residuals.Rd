@@ -4,10 +4,12 @@
 \alias{reg_residuals}
 \title{Residual analysis mimicing the 4-in-1 plots from Minitab}
 \usage{
-reg_residuals(lm_object)
+reg_residuals(lm_object, studentized = FALSE)
 }
 \arguments{
 \item{lm_object}{a fitted regression model from \code{lm}.}
+
+\item{studentized}{use (externally) studentized residuals. Defaults to FALSE.}
 }
 \description{
 Plots:
