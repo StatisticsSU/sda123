@@ -365,13 +365,14 @@ simAR1 <- function(n, phi = 0.0, mu = 0, sigma_eps = 1, epsilons = NA){
 #' @param odds_ratio `TRUE` if odds ratios for parameters is computed.
 #' @param param `TRUE` if parameter estimates, standard errors etc is computed.
 #' @param conf_intervals `TRUE` if confidence intervals for parameters.
+#' @param digits Number of digits for the parameter estimates.
 #' @return list with two tables: param, odds_ratio
 #' @export
 #' @examples
 #' library(sda123)
 #' glmfit <- glm(survived ~ age + sex + firstclass, data = titanic, family = binomial)
 #' logisticreg_summary(glmfit)
-logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_intervals = F){
+logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_intervals = F, digits = 5){
 
   if ("(Intercept)" %in% names(glmobject$coefficients)) intercept = 1 else intercept = 0
 
@@ -391,7 +392,7 @@ logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_inter
     }
 
     {cat("\nParameter estimates\n------------------------------------------------\n");
-      print(param_table, digits = 5, na.print = "")}
+      print(param_table, digits = digits, na.print = "")}
 
   }else{param_table = NA}
 
@@ -408,7 +409,7 @@ logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_inter
     }
 
     {cat("\nOdds ratio estimates\n------------------------------------------------\n");
-      print(odds_ratio_table, digits = 5, na.print = "")}
+      print(odds_ratio_table, digits = digits, na.print = "")}
 
   }else{odds_ratio_table = NA}
 
