@@ -385,7 +385,7 @@ logisticreg_summary <- function(glmobject, odds_ratio = T, param = T, conf_inter
   if (param){
     # Confidence intervals on parameters
     if (conf_intervals){
-      param_table = cbind(glmsummary$coefficients, suppressMessages(confint(glmobject)))
+      param_table = cbind(glmsummary$coefficients, suppressMessages(confint.default(glmobject)))
     }else
     {
       param_table = glmsummary$coefficients
