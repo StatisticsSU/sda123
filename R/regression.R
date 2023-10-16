@@ -283,7 +283,7 @@ reg_residuals <- function(lm_object, studentized = FALSE){
   else {
     lm_object$model$residuals <- resid(lm_object)
   }
-  
+
   lm_object$model$fitted <- fitted(lm_object)
   lm_object$model$obsnumber <- 1:n
 
@@ -477,6 +477,121 @@ logisticreg_simulate <- function(
   names(data) <- c("y", xnames)
   return(data)
 }
+
+
+
+#' Simulate from a Poisson regression model with a log link
+#'
+#' Simulates a dataset with `n` observation from the Poisson regression model \cr
+#' \deqn{y \vert \boldsymbol{x} \sim \mathrm{Pois}(\exp(\beta_0 + \beta_1x_1 + \ldots + \beta_k x_k))}{y | **x** ~ Pois(exp(\beta_0 + \beta_1 * x_1 + ... + \beta_k * x_k))}
+#' with covariates (**x**) simulated from a normal distribution with the same correlation `rho_x` \cr
+#' between all pairs of covariates. Covariate x_j has standard deviation `sigma_x[j]`. \cr
+#' Alternatively the covariate can follow a uniform distribution.
+#' @param n the number of observations in the simulated dataset.
+#' @param betavect a vector with regression coefficients
+#' c(beta_0,beta_1,...beta_k). First element is intercept if `intercept = TRUE`
+#' @param intercept if `TRUE` an intercept is added to the model.
+#' @param covdist distribution of the covariates. Options: `'normal'` or `'uniform'`.
+#' @param rho_x correlation among the covariates. Same for all covariate pairs.
+#' @param sigma_x vector with standard deviation of the covariates.
+#' @return dataframe with simulated data (y, X1, X2, ..., XK) (no intercept included).
+#' @export
+#' @examples
+#' library(sda123)
+#' simdata <- poisreg_simulate(n = 500, betavect = c(1, -0.2, 0.1, 0))
+#' poisregfit <- glm(y ~ X1 + X2 + X3, data = simdata, family = poisson)
+#' summary(poisregfit)
+poisreg_simulate <- function(
+    n,
+    betavect,
+    intercept = TRUE,
+    covdist = 'normal',
+    rho_x = 0,
+    sigma_x = rep(1, length(betavect) - intercept)
+){
+
+  k = length(betavect) - intercept
+
+  # Generate covariates
+  if (covdist == 'normal'){
+    rho = matrix(rho_x, k, k)
+    diag(rho) <- 1
+    sigma = diag(sigma_x)%*%rho%*%diag(sigma_x)
+    X = mvtnorm::rmvnorm(n, sigma = sigma)
+  }else{
+    X = matrix(runif(n*k), n, k)
+    if (rho_x != 0) warning("uniformly distributed covariates are always uncorrelated")
+  }
+  if (intercept) X = cbind(1,X)
+
+  # Simulate Poisson responses
+  y = rpois(n, lambda = exp(X%*%betavect))
+
+  if (intercept) X = X[,-1] # remove intercept in the returned dataset
+  data = data.frame(cbind(y,X))
+  xnames = rep(NA,k)
+  for (j in 1:k) xnames[j] = paste("X",j, sep = "")
+  names(data) <- c("y", xnames)
+  return(data)
+}
+
+#' Simulate from a Negative binomial regression model with a log link
+#'
+#' Simulates a dataset with `n` observation from the Negative binomial regression model \cr
+#' \deqn{y \vert \boldsymbol{x} \sim \mathrm{NegBinomial}(\mu = \exp(\beta_0 + \beta_1x_1 + \ldots + \beta_k x_k), \psi)}{y | **x** ~ NegBinomial(mu = exp(\beta_0 + \beta_1 * x_1 + ... + \beta_k * x_k), psi)}
+#' with covariates (**x**) simulated from a normal distribution with the same correlation `rho_x` \cr
+#' between all pairs of covariates. Covariate x_j has standard deviation `sigma_x[j]`. \cr
+#' Alternatively the covariate can follow a uniform distribution.
+#' @param n the number of observations in the simulated dataset.
+#' @param betavect a vector with regression coefficients
+#' c(beta_0,beta_1,...beta_k). First element is intercept if `intercept = TRUE`
+#' @param size the over-dispersion parameter *psi*
+#' @param intercept if `TRUE` an intercept is added to the model.
+#' @param covdist distribution of the covariates. Options: `'normal'` or `'uniform'`.
+#' @param rho_x correlation among the covariates. Same for all covariate pairs.
+#' @param sigma_x vector with standard deviation of the covariates.
+#' @return dataframe with simulated data (y, X1, X2, ..., XK) (no intercept included).
+#' @export
+#' @examples
+#' library(sda123)
+#' simdata <- nbinomreg_simulate(n = 500, betavect = c(1, -0.2, 0.1, 0), size = 2)
+#' nbinomfit <- glm.nb(y ~ X1 + X2 + X3, data = simdata) # fit using MASS package
+#' summary(nbinomfit)
+nbinomreg_simulate <- function(
+    n,
+    betavect,
+    size,
+    intercept = TRUE,
+    covdist = 'normal',
+    rho_x = 0,
+    sigma_x = rep(1, length(betavect) - intercept)
+){
+
+  k = length(betavect) - intercept
+
+  # Generate covariates
+  if (covdist == 'normal'){
+    rho = matrix(rho_x, k, k)
+    diag(rho) <- 1
+    sigma = diag(sigma_x)%*%rho%*%diag(sigma_x)
+    X = mvtnorm::rmvnorm(n, sigma = sigma)
+  }else{
+    X = matrix(runif(n*k), n, k)
+    if (rho_x != 0) warning("uniformly distributed covariates are always uncorrelated")
+  }
+  if (intercept) X = cbind(1,X)
+
+  # Simulate Negative binomial responses
+  y = rnbinom(n, mu = exp(X%*%betavect), size = size)
+
+  if (intercept) X = X[,-1] # remove intercept in the returned dataset
+  data = data.frame(cbind(y,X))
+  xnames = rep(NA,k)
+  for (j in 1:k) xnames[j] = paste("X",j, sep = "")
+  names(data) <- c("y", xnames)
+  return(data)
+}
+
 
 
 
