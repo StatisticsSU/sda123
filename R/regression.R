@@ -202,7 +202,7 @@ reg_simulate <- function(n, betavect, sigma_eps, intercept = TRUE, responsedist 
   if (responsedist == 'normal'){epsilons = rnorm(n, sd = sigma_eps)}
   else{
       message("student-t errors")
-      if (is.na(studentdf)) stop("Must specify dfstudent when using option responsedist == 'student")
+      if (is.na(studentdf)) stop("Must specify studentdf when using option responsedist == 'student")
       epsilons = rt(n, df = studentdf)*sigma_eps
   }
   # Making the epsilons autocorrelated with AR(1)
